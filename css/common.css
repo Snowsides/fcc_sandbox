@@ -1,0 +1,57 @@
+body {
+    padding-top: 2em;
+}
+
+.b-box,
+.b-box a {
+     color: #ffffff;
+}
+
+.b-box {
+    display: flex; 
+    flex-wrap: nowrap;
+    flex-direction: column;
+    border: 1px solid;
+    border-radius: 20px;
+    background-color: #00bcd4;
+    font: 1em Arial;
+    margin: auto;
+    max-width: 600px;
+}
+
+.b-box__quote {
+    font-size: 1.4em;
+    min-height: 100px;
+}
+
+.b-box__quote:before {
+    content: '“';
+}
+
+.b-box__quote:after {
+    content: '”';
+}
+
+
+.b-box__newquote,
+.b-box__twitter,
+.b-box__quote {
+    padding: 20px;
+}
+
+.b-box__name {
+    text-align: right;
+    padding: 0 20px;
+}
+
+.b-box__footer {
+    display: flex; 
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.b-box__name {
+    font-style: italic;
+}
+
+        

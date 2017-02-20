@@ -1,0 +1,66 @@
+window.onload = function () {
+
+
+    function ab( num ) {
+        var a = 0; 
+
+        return function() {
+            var b = a;
+            while (b == a) {
+                a = getRandomInt ( 0, num );
+            }
+            return a;
+        };
+    }
+
+    function getRandomInt( min, max ) {
+        min = Math.ceil( min );
+        max = Math.floor( max );
+        return Math.floor( Math.random() * (max - min) ) + min;
+    }
+
+    function showQuote() {
+        // var max = quotes.quote.length;
+        //var p = getRandomInt ( 0, max );
+        var p = int();
+
+        var postQuote = el.querySelector( '.b-box__quote' ).textContent = quotes.quote[p][0];
+        var author = quotes.quote[p][1];
+        var postAuthor = el.querySelector( '.b-box__name' ).textContent = quotes.names[author];
+    }        
+      
+    var quotes = {
+            names : ['Bob Dylan', 'Ludwig van Beethoven', 'Frank Zappa', 'Tom Waits', 'Wolfgang Amadeus Mozart', 'Marilyn Manson'],
+            quote : [
+                [ "Jazz isn't dead. It just smells funny.", 2 ],
+                [ "Behind every beautiful thing, there's some kind of pain.", 0 ],
+                [ "The music is not in the notes, but in the silence between.", 4 ],
+                [ "Without deviation from the norm, progress is not possible.", 2 ],
+                [ "Music is ... A higher revelation than all Wisdom & Philosophy", 1 ],
+                [ "I like beautiful melodies telling me terrible things.", 3 ],
+                [ "There ain't no devil, only God when he's drunk.", 3 ],
+                [ "Music is the strongest form of magic.", 5 ],
+                [ "A man is a success if he gets up in the morning and gets to bed at night, and in between he does what he wants to do.", 0 ],
+                [ "Information is not knowledge. Knowledge is not wisdom. Wisdom is not truth. Truth is not beauty. Beauty is not love. Love is not music. Music is the best.", 2 ],
+            ]
+        };
+
+    var el = document.querySelector( '.b-box' );
+    var bottoms = el.querySelector( '.b-box__footer' );
+    var twitter = bottoms.lastElementChild;
+    var newquote = bottoms.lastElementChild;
+
+    var num = quotes.quote.length;
+    var int = ab( num );
+
+    newquote.addEventListener( 'click', function( e ) {
+        e.preventDefault();
+        showQuote();
+    });
+
+
+    showQuote();
+
+}
+
+
