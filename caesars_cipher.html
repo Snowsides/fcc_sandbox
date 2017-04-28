@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Caesars Cipher</title>
+    <script>
+
+        function rot13(str) { // LBH QVQ VG!
+          
+          var alfa1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+              alfa2 = "NOPQRSTUVWXYZABCDEFGHIJKLM",
+              pos,
+              qqq = "";
+          
+          for (var i = 0; i < str.length; i++) {
+            
+            pos = str[i]; //S
+            posCode = pos.charCodeAt(); //83
+            
+            if ( posCode >= 65 && posCode <= 90) {
+              
+              posNum = alfa1.indexOf(pos); //18
+              posNum2 = alfa2[posNum]; //F
+              qqq += posNum2;
+             
+            } else {
+              
+              switch(posCode) {
+                case 32 : qqq += " ";
+                break;
+                  
+                 case 33 : qqq += "!";
+                 break;
+                  
+                 case 63 : qqq += "?";
+                 break;
+                  
+                 case 46 : qqq += ".";
+                 break;
+              }
+              
+            }
+            
+          }
+
+          console.log(qqq); //YOU DID IT!
+          
+          return qqq;
+        }
+
+        rot13("LBH QVQ VG!");
+
+    </script>
+    
+</head>
+<body>
+    
+</body>
+</html>
