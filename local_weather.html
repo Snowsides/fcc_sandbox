@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Local Weather</title>
+    <link rel="stylesheet" type="text/css" href="./css/local_weather.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+          
+          var KEY = 'a6d9644c15004450836134101172102'; // https://developer.worldweatheronline.com/
+          var YAKEY = 'ADpWrVgBAAAArPCuVAIAqRO2JFE61QDGEu5q_0GeVtPd1s0AAAAAAAAAAAAs9W2isfW-RSQ3STHxzHj3Hhp2Qg==';
+          var text_city = 'Your City:';
+          var text_temp = ['Celsius', 'Fahrenheit'];
+
+          var month = {
+            '01':'January',
+            '02':'February',
+            '03':'March',
+            '04':'April',
+            '05':'May',
+            '06':'June',
+            '07':'July',
+            '08':'August',
+            '09':'September',
+            '10':'October',
+            '11':'November',
+            '12':'December'
+          }
+
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition( success ); 
+          }
+
+          function success(position) {
+            var crd = position.coords;
+            var lat = Math.round(crd.latitude * 100) / 100;
+            var lon = Math.round(crd.longitude * 100) / 100;
+
+            //console.log( lat, lon );
+
+            $.getJSON("https://geocode-maps.yandex.ru/1.x/?geocode="+lat+","+lon+"&apikey="+YAKEY+"&format=json&sco=latlong&lang=en_US&results=1", function( json ) {
+
+              //console.log( json );
+
+              var name_city = json['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['description'];
+
+              $(".b-city__text").text( text_city );
+              $(".b-city__name").text( name_city );
+
+            });
+
+            $.getJSON("https://api.worldweatheronline.com/premium/v1/weather.ashx?key="+KEY+"&q="+lat+","+lon+"&format=json&num_of_days=1", function( json ) {
+
+              //console.log( json );
+
+              var date = json['data']['weather'][0]['date'].split('-');
+              var dateMounth = date[1];
+
+              for (var key in month) {
+                if (key == dateMounth) {
+                  dateMounth = month[key];
+                }
+              }
+
+              var fullDate = date[2] + ' ' + dateMounth + ' ' + date[0];
+
+              // console.log( fullDate );
+
+              var pathData = json['data']['current_condition'][0];
+              var weather = pathData['weatherDesc'][0]['value'];
+              var iconUrl = pathData['weatherIconUrl'][0]['value'];
+              var tempC = pathData['temp_C'];
+              var tempF = pathData['temp_F'];
+
+
+
+              $('.b-city__date').text( fullDate );
+
+              $(".b-info__item:nth-child(1)").css( {'background-image': 'url(' + iconUrl + ')', 'background-repeat': 'no-repeat'} );
+
+              $('.b-info__itemTemp .b-info__text__c').text( text_temp[0] );
+              $('.b-info__itemTemp .b-info__text__f').text( text_temp[1] );
+              $(".b-info__itemTemp .b-info__c").html( tempC + '°C');
+              $(".b-info__itemTemp .b-info__f").html( tempF + '°F');
+              $(".b-info__item:nth-child(2) .b-info_itemWeather").text( weather );
+
+              $('nav a').on('click', function( e ) {
+                e.preventDefault();
+
+                var th = $(this);
+                var index = th.index();
+                var el = $( '.b-info__temp' );
+                var add = th.parent().parent().children().find( el[index] ).removeClass('hidden').addClass('block').siblings().removeClass('block').addClass('hidden');
+
+                //console.log( add );
+
+              });
+
+
+            });
+          }
+
+        });
+
+    </script>
+</head>
+<body>
+
+<div class="b-weather">
+    <div class="b-city">
+        <h1><span class="b-city__text"></span> <span class="b-city__name"></span></h1>
+        <h2><span class="b-city__date"></span></h2>
+    </div>
+    <div class="b-info">
+        <div class="b-info__item">
+            <div class="b-info__itemTemp">
+                <ul>
+                    <li class="b-info__temp b-info__c"></li>
+                    <li class="b-info__temp hidden b-info__f"></li>
+                </ul>
+                <nav>
+                    <a class="b-info__text__c" href=""></a>
+                    <a class="b-info__text__f" href=""></a>
+                </nav>
+            </div>
+        </div>
+        <div class="b-info__item">
+            <div class="b-info_itemWeather"></div>
+        </div>
+    </div>
+</div>
+   
+    
+</body>
+</html>

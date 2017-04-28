@@ -1,0 +1,59 @@
+div {border:0px solid;}
+
+body {
+  font-family: Arial;
+}
+
+ol, ul {
+  list-style: none;
+  padding: 0;
+}
+
+.b-weather {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 60%;
+  min-width: 800px;
+}
+
+.b-info {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8em;
+}
+
+.b-info__item {
+  flex: 0 1 33%;
+  height: 64px;
+  background: #E0EAFC;
+  position: relative;
+}
+
+.b-info__item ul {
+  text-align: center;
+}
+
+.b-info__item nav a {
+  display: inline-block;
+  padding-right: 7px;
+}
+
+.b-info__item .b-info__itemTemp li {
+  font-size: 3.0em;
+}
+
+.b-info__item .b-info_itemWeather {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+.b-info__itemTemp .block {
+  display: block;
+}
+
+.b-info__itemTemp .hidden {
+  display: none;
+}
