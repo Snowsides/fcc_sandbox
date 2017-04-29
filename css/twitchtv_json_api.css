@@ -1,0 +1,66 @@
+body {
+  font-family: Arial;
+  padding-top: 2em;
+}
+
+ol, ul {
+  list-style: none;
+  padding: 0;
+}
+
+section {
+  max-width: 60%;
+  margin: auto;
+}
+
+section h1 {
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+nav a {
+    color: linen;
+    background-color: crimson;
+    margin: 0 5px;
+    padding: 3px 7px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: firebrick;
+}
+
+.list li {
+    max-height: 50px;
+    margin: 2px 0;
+    padding: 10px;
+}
+
+.list li span {
+    float: right;
+    font-size: 10px;
+}
+
+.list .green {
+    background-color: yellowgreen
+}
+
+.list .grey {
+    background-color: whitesmoke
+}
+
+.list img {
+    border-radius: 50%;
+    max-height: 100%;
+    vertical-align: middle;
+    width: 40px;
+}
+
+.list a {
+    color: slategray;
+    text-decoration: none;
+}

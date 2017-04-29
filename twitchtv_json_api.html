@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitchtv JSON API</title>
+    <link rel="stylesheet" type="text/css" href="./css/twitchtv_json_api.css" />
+    <script>
+
+        //https://www.freecodecamp.com/challenges/use-the-twitchtv-json-api
+        
+        window.onload = function() {
+
+            var title = "TWITCH STREAMERS";
+            var titleElem = document.querySelector('.title');
+            var list = document.querySelector('.list');
+            titleElem.innerHTML = title;
+
+            var att = 'all'
+            requestList( att );
+
+
+            var elem = document.querySelectorAll( 'nav a' );
+
+            Array.prototype.forEach.call(elem, function( el, i){
+
+                el.addEventListener( 'click', function( e ) {
+                    e.preventDefault();
+
+                    list.innerHTML = '';
+                    att = el.getAttribute('class');
+                    requestList( att );
+                });
+
+            });
+
+            function requestList ( att ) {
+
+                var arrLinks = []; // info streams;
+                var name = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"]; // list streams
+
+                for (var i = name.length - 1; i >= 0; i--) {
+                    addScript( i, att );
+                }
+
+
+                window.userData = function ( data ) {
+                    // console.log(  data );
+
+                    var arrI = {};
+                    var nameStream = data['stream'];
+
+                    if ( nameStream ) {
+                        var channel = nameStream['channel'];
+                        var nameChannel = channel['display_name'];
+                        var nameLogo = channel['logo'];
+                        var nameUrl = channel['url'];
+                        var game = channel['game'];
+                    }
+
+                    if ( !nameStream && att == 'offline' ) {
+                        arrI.nameStream = nameStream;
+                        arrI.nameUrl = data['_links']['channel'];
+
+                        arrLinks.push(arrI);
+
+                    } else if ( att == 'all' ) {
+                            arrI.nameStream = ( nameStream != null ) ?  data['stream']['channel']['display_name'] : nameStream;
+                            arrI.nameUrl = ( nameStream != null ) ? data['stream']['channel']['url'] : data['_links']['channel'];
+
+                            if (nameStream != null) {
+                                arrI.nameStream = nameChannel;
+                                arrI.nameLogo = nameLogo;
+                                arrI.nameUrl = nameUrl;
+                                arrI.game = game;
+                            }
+
+                            arrLinks.push(arrI);
+
+                        } else if ( att == 'online' && nameStream ) {
+                            arrI.nameStream = nameChannel;
+                            arrI.nameLogo = nameLogo;
+                            arrI.nameUrl = nameUrl;
+                            arrI.game = game;
+
+                            arrLinks.push(arrI);
+
+                        } 
+                    // console.log( arrLinks );
+
+                    var listLinks = '';
+
+                    for (var i in arrLinks) {
+                        var nameUrl = arrLinks[i]['nameUrl'];
+
+                        if ( arrLinks[i]['nameStream'] ) {
+                            var nameStream = arrLinks[i]['nameStream'];
+                            var nameLogo = arrLinks[i]['nameLogo'];
+                            var game = arrLinks[i]['game'];
+                            listLinks += '<li class="green"> <img class="logo" src="' + nameLogo + '"/> ' + '<a href="' + nameUrl + '">' + '@' + nameStream  + ' (' + game + ')</a> </li>';
+
+                        } else {
+
+                            nameStream = nameUrl.split('/');
+                            nameStream = nameStream[nameStream.length - 1];
+                            listLinks += '<li class="grey">' + '<a href="https://www.twitch.tv/' + nameStream + '">' + '@' + nameStream + '</a> <span>Offline</span> </li>';
+                        }
+                    }
+                    // console.log( listLinks );
+
+                    list.innerHTML = listLinks;
+
+                };
+
+                function addScript( i, att ) {
+                  var url = 'https://wind-bow.gomix.me/twitch-api/streams/';
+                      url = url + name[i] + '?callback=userData';
+                  // console.log( url );
+
+                  var script = document.createElement( "script" );
+                  script.src = url;
+                  document.body.appendChild( script );
+                  document.body.removeChild( script );
+                }
+
+            }
+
+        }
+        
+    </script>
+</head>
+<body>
+    <section>
+        <h1 class="title"></h1>
+        <nav>
+            <a class="all" href="">All</a>
+            <a class="online" href="">Online</a>
+            <a class="offline" href="">Offline</a>
+        </nav>
+        <ul class="list"></ul>
+    </section>
+</body>
+</html>
