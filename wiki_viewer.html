@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wiki Viewer</title>
+    <link rel="stylesheet" type="text/css" href="./css/wiki_viewer.css" />
+    <script>
+
+        //https://www.freecodecamp.com/challenges/build-a-wikipedia-viewer
+
+        window.onload = function () {
+  
+          var el = document.querySelector( '#wikiViewer' );
+          var resp = document.querySelector( '#listResults' );
+          
+          var clearList = document.querySelector( '.clearlist' );
+          
+          clearList.addEventListener( 'click', function( e ) {
+            e.preventDefault();
+            resp.innerHTML = '';
+            el.elements.search.value = '';
+            
+            this.classList.add( 'hidden' );
+            this.classList.remove( 'block' );
+            
+          });
+
+            el.addEventListener( 'submit', function( e ) {
+            e.preventDefault();
+            var q = el.elements.search.value;
+            var url = 'https://en.wikipedia.org/w/api.php?';
+            var params = 'format=json&gsrlimit=20&action=query&generator=search&origin=*&gsrsearch=' + q;
+            
+            var request = new XMLHttpRequest();
+            
+            request.open( 'POST', url + params, true );
+            request.setRequestHeader( 'Api-User-Agent', 'Example/1.0' );
+            request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            request.send();
+            
+            request.onreadystatechange = function() {
+              
+              if ( this.readyState != 4 ) return;
+
+              if ( this.status != 200 ) {
+                alert( 'Status: ' + ( this.status ? this.statusText : 'error' ) );
+                return;
+
+              } else {
+                
+                  try {
+                      var obj = JSON.parse( this.responseText ).query.pages;
+                      var titleList ='';
+                      //console.log( obj );
+                        for ( var key in obj ) {
+                          var p = obj[key];
+                          titleList += '<li><a target="_blank" href="https://en.wikipedia.org/?curid=' + p.pageid + '">' + p.title + '</a></li>';
+                        }
+
+                  } catch ( e ) {
+                    titleList = 'No data.';
+                  } 
+                  
+                  resp.innerHTML = titleList;
+                
+                  clearList.classList.remove( 'hidden' );
+                  clearList.classList.add( 'block' );
+              }  
+
+            }
+
+          });
+          
+        }
+
+    </script>
+</head>
+<body>
+
+<section>
+    <p class="random"><a target="_blank" href="https://en.wikipedia.org/wiki/Special:Random">Random article</a></p>
+
+    <form name="wikiViewer" id="wikiViewer" action="" method="get">
+      <fieldset>
+          <legend>Wiki_Viewer</legend>
+          <input placeholder="e.g. The Beatles" type="text" name="search">
+          <button>Search</button>
+          <button type="reset">Reset</button>
+      </fieldset>
+    </form>
+
+    <aside>
+    <ul id="listResults"></ul>
+    </aside>
+
+    <aside>
+    <p class="clearlist hidden">Clear</p>
+    </aside>
+</section>
+    
+</body>
+</html>
