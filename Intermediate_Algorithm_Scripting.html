@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FFC Document</title>
+
+    <script>
+
+// Sum All Numbers in a Range
+// https://www.freecodecamp.com/challenges/sum-all-numbers-in-a-range
+function sumAll( arr ) {
+ 
+  var min = arr.reduce( function (a, b) {
+    return Math.min(a, b);
+  } );
+  
+  var max = arr.reduce( function (a, b) {
+    return Math.max(a, b);
+  } );
+  
+  
+  var sortArr = [];
+  
+  for(var i = min; i<= max; i++) {
+    sortArr.push(i);
+  }
+    
+  
+  var sum = sortArr.reduce( function( a, b ) {
+    return a + b; 
+  });
+  
+  return sum;
+}
+
+sumAll([10, 5]);
+
+    
+// Diff Two Arrays
+// https://www.freecodecamp.com/challenges/diff-two-arrays
+function diffArray(arr1, arr2) {
+
+  var newArr = [];
+  var el;
+  
+  for(var i =0; i < arr1.length; i++) {
+
+    el = arr2.indexOf( arr1[i] );
+    
+    if ( el == -1 ) {
+       newArr.push( arr1[i] );
+    }
+    
+  }
+
+  for(var j =0; j < arr2.length; j++) {
+
+    el = arr1.indexOf( arr2[j] );
+    
+    if ( el == -1 ) {
+       newArr.push( arr2[j] );
+    }
+    
+    
+  }
+  
+  // console.log( newArr );
+  
+  return newArr;
+}
+//diffArray( [1, "calf", 3, "piglet"], [7, "filly"] );
+
+
+
+// Roman Numeral Converter
+// https://www.freecodecamp.com/challenges/roman-numeral-converter
+var baseNum = {
+    1 : "I",
+    5 : "V",
+    10 : "X",
+    50 : "L",
+    100 : "C",
+    500 : "D",
+    1000 : "M"
+}, a, b;
+
+function convertToRoman( num ) {
+    var numArr = [];
+    var romanArr = [];
+    var str = num.toString();
+
+    str = str.split('').reverse().join('');
+    // console.log( str );
+
+    for (var i = str.length - 1; i >= 0 ; i--) {
+        var pos = +str[i];
+
+        switch ( i ) {
+            case 3 : numArr.push( pos + "000");
+                break;
+            case 2 : numArr.push( pos + "00");
+                break;
+            case 1 : numArr.push( pos + "0");
+                break;
+            case 0 : numArr.push( pos + "");
+        }
+    }
+    // console.log( numArr );
+
+    for (var j = numArr.length - 1; j >= 0; j--) {
+
+        var el = +numArr[j];
+
+        if( el >= 1000 ) {
+            b = baseNum[1000];
+            concatSimbol( el, a, b );
+        } 
+        else if ( el == 5 ) {
+            romanArr.unshift( baseNum[5] );
+        }
+        else if ( el <= 4 || ( el >= 6 && el <= 8)  ) {
+            a = baseNum[1];
+            b = baseNum[5];
+            concatSimbol( el, a, b );
+        }
+        else if ( el == 9 || el == 90 || el == 900 ) {
+            concat9( el );
+        }
+        else if ( el == 50 ) {
+            romanArr.unshift( baseNum[50] );
+        }
+        else if ( el <= 40 || ( el >= 60 && el <= 80) ) {
+            a = baseNum[10];
+            b = baseNum[50];
+            el = el / 10;
+            concatSimbol( el, a, b );
+        }
+        else if ( el == 500 ) {
+            romanArr.unshift( baseNum[500] );
+        }
+        else if ( el <= 500 || ( el >= 600 && el <= 800) ) {
+            a = baseNum[100];
+            b = baseNum[500];
+            el = el / 100;
+            concatSimbol( el, a, b );
+        }
+    }
+
+    function concat9( el ) {
+        switch( el ) {
+            case 9 : romanArr.unshift( baseNum[1] + baseNum[10] );
+            break;
+            case 90 : romanArr.unshift( baseNum[10] + baseNum[100] );
+            break;
+            case 900 : romanArr.unshift( baseNum[100] + baseNum[1000] );
+            break;
+        }
+    }
+
+    function concatSimbol( el, a, b ) {
+        var p = '';
+
+        if (el >= 1000) {
+            var n = el.toString().substring(0,1);
+
+            for (var k = +n; k >= 1; k--) {
+                p += b;
+            }
+        }
+        else if ( el < 4) {
+            for (var l = 0; l < el; l++) {
+                p += a;
+            }
+        } else if ( el == 4 ) {
+            p = a + b;
+        } else if ( el >= 6 ) {
+            for (var m = 0; m < (el - 5); m++) {
+                p += a;
+            }
+            p = b + p;
+        } 
+
+        romanArr.unshift( p );
+    }
+
+    num = romanArr.join('');
+
+    console.log( num );
+
+    return num;
+
+}
+// convertToRoman(1984);
+
+
+// Wherefore art thou Complete
+// https://www.freecodecamp.com/challenges/wherefore-art-thou
+function whatIsInAName(collection, source) {
+
+    var arr = [];
+
+    var keys = Object.keys( source );
+    var keysLen = keys.length;
+
+
+    for (var i = 0; i <= collection.length - 1; i++) {
+
+        var a;
+        var b = 1;
+
+        if ( keysLen == 1 && ( collection[i][keys[0]] == source[keys] )  ) {
+
+            arr.push( collection[i] );
+
+        } else if ( keysLen > 1) {
+
+            for (var j = 0; j <= keysLen - 1; j++) {
+                a = collection[i].hasOwnProperty(keys[j]);
+                b *= a;
+            }
+
+            if ( b ) {
+                arr.push( collection[i] );
+            }              
+                           
+        }
+
+    }
+
+    // console.log( arr );
+
+    return arr;
+}
+//whatIsInAName([{ first: "Romeo", last: "Montague" }, { first: "Mercutio", last: null }, { first: "Tybalt", last: "Capulet" }], { last: "Capulet" });
+
+
+
+// Search and Replace
+// https://www.freecodecamp.com/challenges/search-and-replace 
+function myReplace(str, before, after) {
+
+    str = str.replace( before,  function(e) {
+        var code = e.charCodeAt(0);
+
+        if ( code <= 90 ) {
+            var first = after[0].toUpperCase();
+
+            var arr = after.split('');
+            arr.splice(0, 1, first);
+            after = arr.join('');
+
+            console.log(after);
+                
+            return after;
+        }
+        
+    });
+  return str;
+}
+//myReplace("Let us get back to more Coding", "Coding", "algorithms");
+
+
+
+// Pig Latin
+// https://www.freecodecamp.com/challenges/pig-latin
+var alef = {
+    "a": "vowel",
+    "e": "vowel",   
+    "i": "vowel",  
+    "o": "vowel",  
+    "u": "vowel",
+    "y": "vowel",
+}
+
+var ay = "ay";
+
+function translatePigLatin(str) {
+
+    var cuople = str.substr(0, 2);
+    var arrCuople = cuople.split('');
+
+    for (var i = 0; i <= arrCuople.length - 1; i++) {
+         if ( alef[arrCuople[i]] == 'vowel' && i == 0 ) {
+           arrCuople.length = 0;
+           break;
+         } else if ( alef[arrCuople[i]] == 'vowel' ) { 
+            arrCuople.pop();
+         }
+    }
+
+    var len = arrCuople.length;
+    var el = "";
+    cuople = arrCuople.join('');
+
+
+    if( cuople.length != 0 ) {
+        el = str.substr( len );
+        el = el + cuople + ay;
+    } else {
+        el = str + ay;
+    }
+
+    // console.log(el);
+
+    return el;
+}
+//translatePigLatin("glove");
+
+
+
+// DNA Pairing
+// https://www.freecodecamp.com/challenges/dna-pairing
+var coupe = {
+    "one" : 'A',
+    "two" : 'T',
+    "three" : 'G',
+    "four" : 'C'
+};
+
+var coupe2 = {
+    "one" : 'T',
+    "two" : 'A',
+    "three" : 'C',
+    "four" : 'G'
+};
+
+var o;
+
+function pairElement(str) {
+    var el = [];
+    var arr = str.split('');
+
+    for (var s = 0; s <= arr.length - 1; s++) {
+
+        o = undefined;
+
+        if ( arr[s] == coupe.one ) {
+            o = new Array( arr[s], coupe2.one );
+            el.push( o );
+
+        } else if ( arr[s] == coupe.two ) {
+            o = new Array( arr[s], coupe2.two );
+            el.push( o );
+
+        } else if ( arr[s] == coupe.three ) {
+            o = new Array( arr[s], coupe2.three );
+            el.push( o );
+
+        } else if ( arr[s] == coupe.four ) {
+            o = new Array( arr[s], coupe2.four );
+            el.push( o );
+        }
+
+    }
+
+    // console.log(el);
+
+    return el;
+}
+//pairElement("GCG");
+
+
+// Missing letters
+// https://www.freecodecamp.com/challenges/missing-letters
+function fearNotLetter(str) {
+    var alfabet = "abcdefghijklmnopqrstuvwxyz";
+        alfabet = alfabet.split('');
+  
+    var arr = str.split(''), 
+        codeA, 
+        codeI;
+
+    var first = arr[0];
+    var p = alfabet.indexOf(first);
+    var alfabet2 = alfabet.splice(p);
+
+    // console.log(alfabet2);
+
+    for (var i = 0; i <=  arr.length -1; i++) {
+        codeA = alfabet2[i].charCodeAt();
+        codeI = arr[i].charCodeAt();
+
+        if (codeA !== codeI) {
+            str = String.fromCharCode(codeA);
+            break;
+        } else {
+            str = undefined;
+        }
+    }
+    //console.log(str);
+
+    return str;
+}
+
+//fearNotLetter("abcdefghjklmno");
+
+
+// Boo who
+// https://www.freecodecamp.com/challenges/boo-who
+function booWho(bool) {
+  // What is the new fad diet for ghost developers? The Boolean.
+  var b = "boolean";
+
+  bool = ( typeof bool == b ) ? true : false;
+
+  // console.log(bool);
+  
+  return bool;
+}
+
+// booWho(false);
+
+
+
+// Sorted Union
+// https://www.freecodecamp.com/challenges/sorted-union
+function uniteUnique(arr) {
+    var sumArr = [], sorted = [], newsum = [], el;
+    
+    for (var i = 0; i <= arguments.length - 1; i++) {
+        var arg = arguments[i];
+
+        for (var key in arg) {
+          sumArr.push(arg[key]);
+        }
+    }
+
+    sorted.push( sumArr[0] );
+    newsum.push(sumArr[0]);
+
+    for (var j = 1; j <= sumArr.length - 1; j++) {
+        el = sorted.indexOf(sumArr[j]);
+        
+        if ( el == -1 ) {
+
+            newsum.push(sumArr[j]);
+        }
+
+        sorted.push( sumArr[j] );
+    }
+
+    return newsum;
+}
+
+// uniteUnique([1, 3, 2], [1, [5]], [2, [4]]);
+
+
+
+// Convert HTML Entities
+// https://www.freecodecamp.com/challenges/convert-html-entities
+function convertHTML(str) {
+    var ent = [ ["&", "&amp;" ], ["<", "&lt;"], [">", "&gt;"], ['"', '&quot;'], ["'", "&apos;"] ];
+    var foo, boo, reg;
+
+    for (var i = 0; i <= ent.length - 1; i++) {
+       foo = ent[i][0];
+       boo = ent[i][1];
+       reg = new RegExp( foo, 'g');
+       str = str.replace(reg, boo);
+    }
+
+    //console.log(str);
+
+    return str;
+}
+//convertHTML("Hamburgers < Pizza < Tacos");
+
+
+// Spinal Tap Case
+// https://www.freecodecamp.com/challenges/spinal-tap-case
+function spinalCase(str) {
+
+    var arr =[];
+
+    str.replace( /(([A-Z][a-z]+))|(([a-z]+))/g, function(e) {
+        arr.push(e);
+    });
+   
+    str = arr.join('-').toLowerCase();
+
+    //console.log(str);
+
+  return str;
+}
+// spinalCase('The_Andy_Griffith_Show');
+
+
+
+// Sum All Odd Fibonacci Numbers
+// https://www.freecodecamp.com/challenges/sum-all-odd-fibonacci-numbers
+function sumFibs(num) {
+    var arr =[1,1], el, sl, odd;
+    
+    do {
+      sl = arr.slice(-2);
+      el = sl[0] + sl[1];
+      if ( el <= num ) arr.push(el);
+    } while (el < num);
+
+    var oddFib = arr.filter(function(i) {
+        i %= 2;
+        return i !== 0;
+    });
+
+    // console.log(oddFib);
+
+    var res = oddFib.reduce(function(sum, current) {
+      return sum + current;
+    }, 0);
+
+    //console.log(res);
+
+    return res;
+}
+
+// sumFibs(75025);
+
+
+// Sum All Primes
+// https://www.freecodecamp.com/challenges/sum-all-primes
+function sumPrimes(num) {
+    var arrAll = [], arrPrimes = [], el, temp;
+    var j = num;
+
+    while (j > 0) {
+        arrAll.unshift(j);
+        j--;
+    }
+
+   
+    for (var i = 1; i <= arrAll.length - 1; i++) {
+        var arr = [];
+        var n = arrAll[i] - 1;
+
+        while (n > 1) {
+            el = arrAll[i] / n;
+            arr.push(el);
+            n--;
+        }
+
+        var res = arr.every( function( number ) {
+            temp = number - Math.floor( number );
+            return temp != 0;
+        }); 
+
+        if(res) {
+            arrPrimes.push( arrAll[i] );
+        }
+    }
+
+    // console.log(arrPrimes);
+
+
+    num = arrPrimes.reduce(function( sum, current ) {
+      return sum + current;
+    }, 0);
+
+    //console.log(num);
+
+    return num;
+}
+
+// sumPrimes(10);
+
+
+
+// Smallest Common Multiple
+// https://www.freecodecamp.com/challenges/smallest-common-multiple
+function smallestCommons(arr) {
+    arr = arr.sort( compNum );
+    var a = arr[0],
+        b = arr[1]; 
+
+
+    var arrAll =[];
+    while (b >= a) {
+        arrAll.push( a );
+        a++;
+    }
+
+    var listArr,
+        take2,
+        num = 300000,
+        el;
+
+
+    while( arrAll.length >= 2 ) {
+        // debugger;
+        listArr = [];
+        take2 = arrAll.splice(0,2);
+
+        for (var i = 0; i <=  take2.length - 1; i++) {
+            creatArr( take2[i], num );
+        }
+
+        el = findLcm( listArr );
+
+        arrAll.unshift( el );
+    }
+
+
+    function findLcm( listArr ) {
+        var lcm, 
+            found,
+            listArrFirst = listArr[0];
+
+        for (var l = 0; l <= listArrFirst.length - 1; l++) {
+
+            found = true;
+
+            for (var y = 1; y <= listArr.length - 1; y++) {
+               if (  listArr[y].indexOf( listArrFirst[l] ) == -1  ) {
+                    found = false;
+                    break;
+               }
+            }
+
+            if (found) {
+                lcm = listArrFirst[l];
+                return lcm;
+            }
+
+        }
+    }
+
+    function creatArr(n, num) {
+
+        var i = 0, 
+            j = 0, 
+            arrAdd = [];
+
+        while (j <= num) {
+            i += n;
+            arrAdd.push( i );
+            j++;
+        }
+
+        listArr.push( arrAdd );
+        return listArr;
+    }
+
+    function compNum(a, b) {
+      if (a > b) return 1;
+      if (a < b) return -1;
+    }
+
+    //console.log( el );
+
+    return el;
+}
+
+// smallestCommons( [23, 18] );
+
+
+// Finders Keepers
+// https://www.freecodecamp.com/challenges/finders-keepers
+function findElement(arr, func) {
+  var num = 0,
+      l = arr.length;
+
+      for (var i = 0; i <= l - 1; i++) {
+
+          num = func( arr[i] );
+
+          if ( num ) {
+            num = arr[i]
+            break;
+          }
+      }
+
+  return num;
+
+}
+
+// findElement([1, 3, 5, 8, 9, 10], function(num) {  return num % 2 === 0; });
+
+
+// Drop it
+// https://www.freecodecamp.com/challenges/drop-it
+function dropElements(arr, func) {
+  
+  var l = arr.length;
+
+  while( l > 0 && !func( arr[0] ) ) {
+    arr.shift();
+  }
+
+  // console.log( arr );
+  
+  return arr;
+}
+
+// dropElements([1, 2, 3], function(n) {return n > 0;});
+
+
+
+// Steamroller
+// https://www.freecodecamp.com/challenges/steamroller
+function steamrollArray(arr) {
+
+   var steamArr = [];
+
+   function ifArr( i ) {
+
+        if ( Array.isArray( i ) ) {
+
+            // console.log( i );
+
+            while( i.length > 0 ) {
+                var j = i.shift();
+                ifArr( j );
+            }
+        } else {
+            steamArr.push( i );
+        }
+
+   }
+
+  for (var i = 0; i <= arr.length - 1; i++) {
+     ifArr( arr[i] );
+  }
+
+  
+  // console.log( steamArr );
+
+  return steamArr;
+}
+
+// steamrollArray( [1, [2], [3, [ [4] ] ] ] );
+// steamrollArray([1, [2], [3, [[4]]]]);
+
+
+
+
+// Binary Agents
+// https://www.freecodecamp.com/challenges/binary-agents
+function binaryAgent(str) {
+
+  var newArr = [];
+  str = str.split(' ');
+
+  str.forEach( function( item ) {
+    item = String.fromCharCode( parseInt( item, 2 ) );
+    newArr.push( item );
+  });
+
+  newArr = newArr.join('');
+
+  // console.log( newArr );
+  return newArr;
+
+}
+
+// binaryAgent("01000001 01110010 01100101 01101110 00100111 01110100 00100000 01100010 01101111 01101110 01100110 01101001 01110010 01100101 01110011 00100000 01100110 01110101 01101110 00100001 00111111");
+
+
+// Everything Be True
+// https://www.freecodecamp.com/challenges/everything-be-true
+function truthCheck(collection, pre) {
+  var newArr = [], el;
+
+  for (var i = collection.length - 1; i >= 0; i--) {
+      el = ( collection[i][pre] ) ? true : false;
+      if (!el) break;
+  }
+
+  // console.log( el );
+
+  return el;
+}
+
+// truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex");
+
+
+// Arguments Optional
+// https://www.freecodecamp.com/challenges/arguments-optional
+function addTogether() {
+
+    var arr = [];
+    for (var i = arguments.length - 1; i >= 0; i--) {
+        arr.push( arguments[i] );
+    }
+    var len = arr.length;
+    var getValid = arr.every( function( n ) {
+        return typeof n === "number";
+    }); 
+
+
+    if ( len === 1 && typeof arr[0] === "number" ) { 
+
+        return function( second ) {
+             return ( typeof second === "number" ) ? arr[0] + second : undefined;
+        };
+
+    } else if ( len > 1 && getValid ) {
+
+       var result = arr.reduce(function(sum, current) {
+          return sum + current;
+        }, 0);
+
+       return result;
+
+    } else {
+        return undefined;
+    }
+
+}
+
+// console.log( addTogether(2)([3]) );
+// console.log( addTogether("http://bit.ly/IqT6zt") );
+// console.log( addTogether(2, 3) );
+// console.log( addTogether(2, "3") );
+// console.log( addTogether(2)(3) );
+
+
+function addTogether() {
+
+    var first = arguments[0];
+
+    return function( second ) {
+        return first + second;
+    };
+    
+
+}
+
+// debugger;
+// var boo = addTogether(2);
+// console.log( boo(3) );
+// console.log( addTogether(2)(3) );
+
+
+// var x = addTogether(2);
+// x(3);
+//addTogether(2)(3)
+
+
+
+
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
